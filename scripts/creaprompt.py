@@ -7,16 +7,16 @@ from modules import scripts
 from modules import script_callbacks
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-folder_path = os.path.join(script_dir, "../cvs/" )
+folder_path = os.path.join(script_dir, "../csv/" )
 
 def send_text_to_prompt(new_text, old_text):
     return new_text
-
+    
 def send_before_prompt(new_text, old_text):
-    return new_text + " " + old_text
-
+    return new_text + "," + old_text
+    
 def send_after_prompt(new_text, old_text):
-    return old_text + " " + new_text    
+    return old_text + "," + new_text    
     
 def read_random_line_from_csv_files(Prefix, sufix, *args):
     chosen_lines = []
@@ -31,12 +31,13 @@ def read_random_line_from_csv_files(Prefix, sufix, *args):
                     if i == idx and arg:
                        chosen_lines.extend(map(str, random_row.tolist()))
     concatenated_lines = ",".join(chosen_lines)
-if Prefix:
-    concatenated_lines = Prefix + "," + concatenated_lines
-if sufix:
-    concatenated_lines = concatenated_lines + "," + sufix
-if not any(args):
-    concatenated_lines = "Aucun résultat sélectionné."
+    
+    if Prefix:
+        concatenated_lines = Prefix + "," + concatenated_lines
+    if sufix:
+        concatenated_lines = concatenated_lines + "," + sufix
+    if not any(args):
+        concatenated_lines = "Aucun résultat sélectionné."
     return concatenated_lines    
 
 class CreaPromptScript(scripts.Script):
@@ -48,7 +49,7 @@ class CreaPromptScript(scripts.Script):
 
     def show(self, is_img2img):
         return scripts.AlwaysVisible
-        
+ 
     def ui(self, is_img2img):
         with gr.Group():
             with gr.Accordion("CreaPrompt", open=False):
@@ -67,14 +68,14 @@ class CreaPromptScript(scripts.Script):
                       sufix = gr.Textbox(label="Suffix of the Prompt", elem_id="promptgen_prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it").style(container=True)
                       prompt = gr.Textbox(label="Generated Prompt", elem_id="promptgen_prompt", show_label=True, lines=2, placeholder="Make the selection of your choice and Click Generate button").style(container=True)
                       with gr.Row():
-                           #with gr.Column(scale=1):
                             Sendbefore = gr.Button('Send before the prompt', elem_id="promptgen_sendto_img", variant='primary')
-                            Sendafter = gr.Button('Send after prompt', elem_id="promptgen_sendto_txt", variant='primary')                            
+                            Sendafter = gr.Button('Send after the prompt', elem_id="promptgen_sendto_txt", variant='primary')                            
                       with gr.Column(scale=2): 
                             send_text_button = gr.Button(value='Replace prompt', variant='primary')
               with gr.Row():
-                    submit = gr.Button('Generate', elem_id="promptgen_generate", variant='primary')      
-          with contextlib.suppress(AttributeError):
+                    submit = gr.Button('Generate', elem_id="promptgen_generate", variant='primary')
+
+        with contextlib.suppress(AttributeError):
             submit.click(
                            fn=read_random_line_from_csv_files,
                            inputs=[Prefix] + [sufix] + checkboxes,
