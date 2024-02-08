@@ -59,7 +59,7 @@ class CreaPromptScript(scripts.Script):
                       checkboxes = []
                       for filename in os.listdir(folder_path):
                         if filename.endswith(".csv"):
-                          checkbox = gr.inputs.Checkbox(label=filename[:-4])
+                          checkbox = gr.inputs.Checkbox(label=filename[3:-4])
                           checkboxes.append(checkbox) 
                           checkbox_rows = [[checkbox] for checkbox in checkboxes]
                 with gr.Column(scale=50):
