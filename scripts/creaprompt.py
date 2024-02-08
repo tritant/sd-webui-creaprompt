@@ -3,6 +3,7 @@ import os
 import gradio as gr
 import random
 import pandas as pd
+from gradio import components as grc
 from modules import scripts
 from modules import script_callbacks
 
@@ -60,13 +61,22 @@ class CreaPromptScript(scripts.Script):
                       checkboxes = []
                       for filename in os.listdir(folder_path):
                         if filename.endswith(".csv"):
-                          checkbox = gr.inputs.Checkbox(label=filename[3:-4])
+                          #checkbox = gr.inputs.Checkbox(label=filename[3:-4])
+                          checkbox = grc.Checkbox(label=filename[3:-4])
                           checkboxes.append(checkbox) 
                           checkbox_rows = [[checkbox] for checkbox in checkboxes]
                 with gr.Column(scale=50):
-                      Prefix = gr.Textbox(label="Prefix of the Prompt", elem_id="promptgen_prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it").style(container=True)
-                      sufix = gr.Textbox(label="Suffix of the Prompt", elem_id="promptgen_prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it").style(container=True)
-                      prompt = gr.Textbox(label="Generated Prompt", elem_id="promptgen_prompt", show_label=True, lines=2, placeholder="Make the selection of your choice and Click Generate button").style(container=True)
+                      Prefix = grc.Textbox(
+                                            label="Prefix of the Prompt",
+                                            elem_id="promptgen_prompt_prefix",
+                                            show_label=True,
+                                            lines=2,
+                                            placeholder="Type your prefix or leave blank if you don't want it",
+                                            container=True
+                                           )
+                      #Prefix = gr.Textbox(label="Prefix of the Prompt", elem_id="promptgen_prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it").style(container=True)
+                      sufix = grc.Textbox(label="Suffix of the Prompt", elem_id="promptgen_prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it", container=True)
+                      prompt = grc.Textbox(label="Generated Prompt", elem_id="promptgen_prompt", show_label=True, lines=2, placeholder="Make the selection of your choice and Click Generate button", container=True)
                       with gr.Row():
                             Sendbefore = gr.Button('Send before the prompt', elem_id="promptgen_sendto_img", variant='primary')
                             Sendafter = gr.Button('Send after the prompt', elem_id="promptgen_sendto_txt", variant='primary')                            
