@@ -10,7 +10,11 @@ from modules import script_callbacks
 script_dir = os.path.dirname(os.path.abspath(__file__))
 folder_path = os.path.join(script_dir, "../csv/" )
 
-def send_text_to_prompt(new_text, old_text):
+def send_text_to_prompt(new_text, old_text, Prefix, sufix):
+    if Prefix:
+        new_text = Prefix + "," + new_text
+    if sufix:
+        new_text = new_text + "," + sufix
     return new_text
     
 def send_before_prompt(new_text, old_text):
@@ -33,12 +37,9 @@ def read_random_line_from_csv_files(Prefix, sufix, *args):
                        chosen_lines.extend(map(str, random_row.tolist()))
     concatenated_lines = ",".join(chosen_lines)
     
-    if Prefix:
-        concatenated_lines = Prefix + "," + concatenated_lines
-    if sufix:
-        concatenated_lines = concatenated_lines + "," + sufix
+
     if not any(args):
-        concatenated_lines = "Aucun résultat sélectionné."
+        concatenated_lines = "Please, select a category."
     return concatenated_lines
 
 class CreaPromptScript(scripts.Script):
@@ -92,15 +93,15 @@ class CreaPromptScript(scripts.Script):
                 Sendbefore.click(fn=send_before_prompt, inputs=[prompt, self.boxxIMG], outputs=[final])
                 Sendafter.click(fn=send_after_prompt, inputs=[prompt, self.boxxIMG], outputs=[self.boxxIMG])
                 Sendafter.click(fn=send_after_prompt, inputs=[prompt, self.boxxIMG], outputs=[final])
-                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxxIMG], outputs=[self.boxxIMG])
-                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxxIMG], outputs=[final])
+                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxxIMG, Prefix, sufix], outputs=[self.boxxIMG])
+                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxxIMG, Prefix, sufix], outputs=[final])
             else:
                 Sendbefore.click(fn=send_before_prompt, inputs=[prompt, self.boxx], outputs=[self.boxx])
                 Sendbefore.click(fn=send_before_prompt, inputs=[prompt, self.boxx], outputs=[final])
                 Sendafter.click(fn=send_after_prompt, inputs=[prompt, self.boxx], outputs=[self.boxx])
                 Sendafter.click(fn=send_after_prompt, inputs=[prompt, self.boxx], outputs=[final])
-                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx], outputs=[self.boxx])
-                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx], outputs=[final])
+                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx, Prefix, sufix], outputs=[self.boxx])
+                send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx, Prefix, sufix], outputs=[final])
         return [prompt, send_text_button]
 
     def after_component(self, component, **kwargs):
