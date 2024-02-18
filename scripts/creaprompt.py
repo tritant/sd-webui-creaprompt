@@ -194,55 +194,7 @@ class CreaPromptScript(scripts.Script):
                    p.all_prompts[i] = randprompt
                    if i == 1:
                      print("Prompt used for auto prompting:" + " " + randprompt)
-            #demo = gr.Interface(fn=auto_send_to_final, 
-             #       inputs=CreaPromptScript.final_element, 
-              #      outputs=final
-               #     )
-             # Access current text (if needed):
-            #current_text = gr.Textbox("creaprompt_prompt_final").value
-            #print (current_text)
-            # Update text using JavaScript:
-            #if CreaPromptScript.final_element:
-            #reaPromptScript.final_element.update(value="text")
-            #print(CreaPromptScript.final_element)
-            #iface = gr.Interface(...)
 
-            # Rafraîchir l'interface utilisateur
-            #iface.refresh()
-            #gr.Interface.get_instances()[0].refresh()
-            #final_element = gr.Interface.get_element("creaprompt_prompt_final")
-            #CreaPromptScript.final_element.set_element("creaprompt_prompt_final", value=randprompt)
-            #final.submit(randprompt)
-
-            
-    #positive = prefix.join('{prompt}')
-                #positivePrompt = positive#createPositive(style, prompt)
-                
-            #for i, prompt in enumerate(p.all_negative_prompts):
-             #   negativePrompt = createNegative(style, prompt)
-              #  p.all_negative_prompts[i] = negativePrompt
-        #if(batchCount > 1):
-         #   styles = {}
-          #  for i, prompt in enumerate(p.all_prompts):
-           #     if(randomize):
-            #        styles[i] = random.choice(self.styleNames)
-             #   else:
-              #      styles[i] = style
-               # if(allstyles):
-                #    styles[i] = self.styleNames[i % len(self.styleNames)]
-            # for each image in batch
-            #for i, prompt in enumerate(p.all_prompts):
-             #   positivePrompt = createPositive(
-              #      styles[i] if randomizeEach or allstyles else styles[0], prompt)
-               # p.all_prompts[i] = positivePrompt
-            #for i, prompt in enumerate(p.all_negative_prompts):
-             #   negativePrompt = createNegative(
-              #      styles[i] if randomizeEach or allstyles else styles[0], prompt)
-               # p.all_negative_prompts[i] = negativePrompt
-
-        #p.extra_generation_params["Style Selector Enabled"] = True
-        #p.extra_generation_params["Style Selector Randomize"] = randomize
-        #p.extra_generation_params["Style Selector Style"] = style
         
 
     def after_component(self, component, **kwargs):
