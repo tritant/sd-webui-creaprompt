@@ -8,3 +8,13 @@ The x are numbers which will determine the display order in the prompt (alphabet
 
 ![Capture d'écran 2024-02-18 034453](https://github.com/tritant/sd-webui-creaprompt/assets/15909062/7f92cb9f-c9a2-42ba-9951-10a2bdd555e9)
 
+Thanks to:
+Philippe Joye
+Franck Cal
+StudioD Uzès
+Néo Drôle De Gueule
+Light Vision AI
+Adel AI
+Thomas_Buyle
+Francophones, rejoignez nous sur le groupe facebook Stable Diffusion FR
+https://www.facebook.com/groups/821563432186323
