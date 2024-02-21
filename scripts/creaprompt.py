@@ -179,22 +179,26 @@ class CreaPromptScript(scripts.Script):
             
         if(batchCount > 1):
             randprompts = {}
-            randprompt = read_random_line_from_csv_files(checkbox_group)
-            if prefix:
-                randprompt = prefix + "," + randprompt
-            if sufix:
-                randprompt = randprompt + "," + sufix
+            randprompt = ""
             for i, prompt in enumerate(p.all_prompts):
                 if(is_randomize):
                    randprompt = read_random_line_from_csv_files(checkbox_group)
+                   if prefix:
+                      randprompt = prefix + "," + randprompt
+                   if sufix:
+                      randprompt = randprompt + "," + sufix
                    randprompts[i] = randprompt
                    p.all_prompts[i] = randprompts[i]
                    print("Prompt used for auto prompting:" + " " + randprompts[i])
                 else:
-                   p.all_prompts[i] = randprompt
-                   if i == 1:
-                     print("Prompt used for auto prompting:" + " " + randprompt)
-
+                    if i == 0:
+                      randprompt = read_random_line_from_csv_files(checkbox_group)
+                      if prefix:
+                         randprompt = prefix + "," + randprompt
+                      if sufix:
+                         randprompt = randprompt + "," + sufix
+                      print("Prompt used for auto prompting:" + " " + randprompt)
+                p.all_prompts[i] = randprompt
         
 
     def after_component(self, component, **kwargs):
