@@ -10,7 +10,7 @@ The x are numbers which will determine the display order in the prompt (alphabet
 
 Thanks to:
 
-Philippe Joye, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas_Buyle
+Philippe Joye, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle
 
 Francophones, rejoignez nous sur le groupe facebook Stable Diffusion FR
 
