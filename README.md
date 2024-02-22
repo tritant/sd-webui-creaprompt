@@ -11,7 +11,7 @@ There is an automatic mode, select auto prompting and random prompt, set the bat
 
 Thanks to:
 
-Philippe Joye, Francis Malapris, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle, Laurent Vishnou
+Philippe Joye, Francis Malapris, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle, Laurent Vishnou, Antoine Drugeot
 
 Francophones, rejoignez nous sur le groupe facebook Stable Diffusion FR
 
