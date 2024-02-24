@@ -10,6 +10,7 @@ from modules import script_callbacks
 script_dir = os.path.dirname(os.path.abspath(__file__))
 folder_path = os.path.join(script_dir, "../csv/" )
 
+
 def send_text_to_prompt(new_text, old_text, Prefix, sufix):
     if Prefix:
         new_text = Prefix + "," + new_text
@@ -63,13 +64,20 @@ def getfilename():
         if filename.endswith(".csv"):
            name.append(filename[3:-4])
     return name
-            
+    
+def check_all():
+        return checkboxes  
+        
+def uncheck_all():
+        return
+        
+checkboxes = getfilename()          
 
 class CreaPromptScript(scripts.Script):
     def __init__(self) -> None:
         super().__init__()
         
-    checkboxes = getfilename()
+    #checkboxes = getfilename()
     final_element = None
 
     def title(self):
@@ -77,15 +85,18 @@ class CreaPromptScript(scripts.Script):
 
     def show(self, is_img2img):
         return scripts.AlwaysVisible
- 
+        
     def ui(self, is_img2img):
         with gr.Group():
             with gr.Accordion("CreaPrompt", open=False):
               gr.Markdown("# CreaPrompt")
               gr.Markdown("Select the categories you want to use to create the prompt or build your prompt category by category")
-              #with gr.Row():
+              with gr.Row():
+                      check_all_button = gr.Button("Select all categories", elem_id="check_all_box", variant="primary")
+                      uncheck_all_button = gr.Button("Deselect all categories", elem_id="uncheck_all_box", variant="primary")
               with gr.Column():
-                      checkbox_group = grc.CheckboxGroup(label="Select Categories", choices=self.checkboxes, default=['base'], min_width=50)
+                      gr.Markdown("#")
+                      checkbox_group = grc.CheckboxGroup(label="Select Categories", choices=checkboxes, default=['base'], min_width=50)
               with gr.Column(scale=3):
                       gr.Markdown("#")
                       final = grc.Textbox(label="Final prompt which will be used to generate the image:", elem_id="creaprompt_prompt_final", show_label=True, lines=2, placeholder="The final prompt is displayed here", container=True)
@@ -123,7 +134,9 @@ class CreaPromptScript(scripts.Script):
                  
         with contextlib.suppress(AttributeError):
    
-            
+            check_all_button.click(check_all, inputs=[], outputs=[checkbox_group])
+            uncheck_all_button.click(uncheck_all, inputs=[], outputs=[checkbox_group])
+                                    
         
             
             if is_img2img:
