@@ -71,6 +71,36 @@ def check_all():
 def uncheck_all():
         return
         
+def get_config_files():
+    config_files = []
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".config"):
+            config_files.append(filename[:-7])
+    return config_files
+    
+def load_checkbox_state(selected_file):
+    if not selected_file:
+        print("Please select a file.")
+        return
+    file_path = os.path.join(folder_path, selected_file + ".config")
+    with open(file_path, "r") as file:
+        lines = file.readlines()
+        selected_checkboxes = [line.strip() for line in lines]
+    return selected_checkboxes
+    
+def save_checkbox_state(checkbox_group, file_name):
+                if not file_name:
+                  print("Please enter a file name.")
+                  return gr.update(choices=get_config_files())
+                if not file_name.endswith('.config'):
+                  file_name += '.config'
+                  file_path = os.path.join(folder_path, file_name)
+                with open(file_path, "w") as file:
+                  for checkbox in checkbox_group:
+                    file.write(f"{checkbox}\n")
+                print("Checkbox state saved successfully.")
+                return gr.update(choices=get_config_files(), value= file_name[:-7])            
+        
 checkboxes = getfilename()          
 
 class CreaPromptScript(scripts.Script):
@@ -92,8 +122,12 @@ class CreaPromptScript(scripts.Script):
               gr.Markdown("# CreaPrompt")
               gr.Markdown("Select the categories you want to use to create the prompt or build your prompt category by category")
               with gr.Row():
+                      save_state_button = gr.Button("Save a preset of the selected categories", elem_id="save_state", variant="primary")
                       check_all_button = gr.Button("Select all categories", elem_id="check_all_box", variant="primary")
                       uncheck_all_button = gr.Button("Deselect all categories", elem_id="uncheck_all_box", variant="primary")
+              with gr.Row():
+                      file_name_textbox = grc.Textbox(label="Enter a file name to save the preset:", elem_id="file_name", show_label=True, placeholder="Enter file name here", container=True)
+                      file_dropdown_component = gr.Dropdown(label="Choose your category preset:", choices=get_config_files(), elem_id="file_dropdown", value="Select a categories preset")
               with gr.Column():
                       gr.Markdown("#")
                       checkbox_group = grc.CheckboxGroup(label="Select Categories", choices=checkboxes, default=['base'], min_width=50)
@@ -131,13 +165,13 @@ class CreaPromptScript(scripts.Script):
                                     is_enabled = grc.Checkbox(label="Enable auto prompting", info="Enable Or Disable auto prompting", value=False)
                                     is_randomize = grc.Checkbox(label="Enable random prompts", info="Enable or Disable random prompts for each images in batch", value=False)
                                     gr.Markdown("# ")
-                 
+                                    
         with contextlib.suppress(AttributeError):
    
             check_all_button.click(check_all, inputs=[], outputs=[checkbox_group])
             uncheck_all_button.click(uncheck_all, inputs=[], outputs=[checkbox_group])
-                                    
-        
+            save_state_button.click(save_checkbox_state, inputs= [checkbox_group, file_name_textbox], outputs=[file_dropdown_component])                        
+            file_dropdown_component.change(load_checkbox_state, inputs=[file_dropdown_component], outputs=[checkbox_group])
             
             if is_img2img:
                 submitcollection.click(
