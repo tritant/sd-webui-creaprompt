@@ -113,29 +113,36 @@ class CreaPromptScript(scripts.Script):
     def ui(self, is_img2img):
         with gr.Group():
             with gr.Accordion("CreaPrompt", open=False):
-              gr.Markdown("# CreaPrompt")
-              gr.Markdown("Select the categories you want to use to create the prompt or build your prompt category by category")
+              #gr.Markdown("# CreaPrompt")
+              #gr.Markdown("Select the categories you want to use to create your prompt or build your prompt category by category")
+                                 
+              
+              gr.Markdown("# Auto prompting")
+              gr.Markdown("When activated, just press the normal generate button, it also works with batch, don't forget to choose your categories")
               with gr.Row():
+                      is_enabled = grc.Checkbox(label="Enable auto prompting", info="Enable Or Disable auto prompting", value=False)
+                      is_randomize = grc.Checkbox(label="Enable random prompts", info="Enable or Disable random prompts for each images in batch", value=False)  
+              with gr.Row():
+                      gr.Markdown("# ")
+              with gr.Row():        
+                      gr.Markdown("# ")
+              with gr.Row():        
                       save_state_button = gr.Button("Save a preset of the selected categories", elem_id="save_state", variant="primary")
-              #with gr.Row():
                       file_name_textbox = grc.Textbox(elem_id="file_name", show_label=False, placeholder="Enter the name of the preset you want to save", container=True)
                       file_dropdown_component = gr.Dropdown(show_label=False, choices=get_config_files(), elem_id="file_dropdown", value="Select a categories preset")
               with gr.Column():
                       gr.Markdown("#")
-                      checkbox_group = grc.CheckboxGroup(label="Select Categories", choices=checkboxes, default=['base'], min_width=50)
+                      checkbox_group = grc.CheckboxGroup(label="Select Categories:", choices=checkboxes, default=['base'], min_width=50)
               with gr.Column(scale=3):
-                      gr.Markdown("#")
+                      gr.Markdown("# Create prompt manually")
+                      gr.Markdown("Press the normal generate button to start generating image with the final prompt")
+                      #gr.Markdown("# ")
                       final = grc.Textbox(label="Final prompt which will be used to generate the image:", elem_id="creaprompt_prompt_final", show_label=True, lines=2, placeholder="The final prompt is displayed here", container=True)
                       CreaPromptScript.final_element = final
                       Prefix = grc.Textbox(label="Prefix of the Prompt:", elem_id="promptgen_prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it", container=True)
                       sufix = grc.Textbox(label="Suffix of the Prompt:", elem_id="promptgen_prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it", container=True)
                       prompt = grc.Textbox(label="Created Prompt from categories:", elem_id="promptgen_prompt", show_label=True, lines=2, placeholder="Make the selection of your choice and Click Generate button", container=True)
-                      with gr.Row():
-                            gr.Markdown("# ")
-                      with gr.Row():
-                            gr.Markdown("# Create prompt manually")
-                      with gr.Row():      
-                            gr.Markdown("Press the normal generate button to start generating image with the final prompt")
+                      gr.Markdown("# ")
                       with gr.Row():
                             Sendbefore = gr.Button('Add before final prompt', elem_id="promptgen_sendto_img", variant='primary')
                             send_text_button = gr.Button(value='Replace final prompt', variant='primary')
@@ -150,12 +157,7 @@ class CreaPromptScript(scripts.Script):
                                  gr.Markdown("Choose one prompt from the collection and press the normal generate button")
                                  with gr.Row():
                                     submitcollection = gr.Button('Choose one prompt from collection', elem_id="promptgen_generate_collection", variant='primary')
-                                 with gr.Column(scale=1):
-                                    gr.Markdown("# ")
-                                    gr.Markdown("# Auto prompting")
-                                    gr.Markdown("When activated, just press the normal generate button, it also works with batch, don't forget to choose your categories")
-                                    is_enabled = grc.Checkbox(label="Enable auto prompting", info="Enable Or Disable auto prompting", value=False)
-                                    is_randomize = grc.Checkbox(label="Enable random prompts", info="Enable or Disable random prompts for each images in batch", value=False)
+                                 with gr.Row():
                                     gr.Markdown("# ")
                                     
         with contextlib.suppress(AttributeError):
