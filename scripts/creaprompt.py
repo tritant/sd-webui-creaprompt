@@ -65,12 +65,6 @@ def getfilename():
            name.append(filename[3:-4])
     return name
     
-def check_all():
-        return checkboxes  
-        
-def uncheck_all():
-        return
-        
 def get_config_files():
     config_files = []
     for filename in os.listdir(folder_path):
@@ -123,11 +117,9 @@ class CreaPromptScript(scripts.Script):
               gr.Markdown("Select the categories you want to use to create the prompt or build your prompt category by category")
               with gr.Row():
                       save_state_button = gr.Button("Save a preset of the selected categories", elem_id="save_state", variant="primary")
-                      check_all_button = gr.Button("Select all categories", elem_id="check_all_box", variant="primary")
-                      uncheck_all_button = gr.Button("Deselect all categories", elem_id="uncheck_all_box", variant="primary")
-              with gr.Row():
-                      file_name_textbox = grc.Textbox(label="Enter a file name to save the preset:", elem_id="file_name", show_label=True, placeholder="Enter file name here", container=True)
-                      file_dropdown_component = gr.Dropdown(label="Choose your category preset:", choices=get_config_files(), elem_id="file_dropdown", value="Select a categories preset")
+              #with gr.Row():
+                      file_name_textbox = grc.Textbox(elem_id="file_name", show_label=False, placeholder="Enter the name of the preset you want to save", container=True)
+                      file_dropdown_component = gr.Dropdown(show_label=False, choices=get_config_files(), elem_id="file_dropdown", value="Select a categories preset")
               with gr.Column():
                       gr.Markdown("#")
                       checkbox_group = grc.CheckboxGroup(label="Select Categories", choices=checkboxes, default=['base'], min_width=50)
@@ -168,8 +160,6 @@ class CreaPromptScript(scripts.Script):
                                     
         with contextlib.suppress(AttributeError):
    
-            check_all_button.click(check_all, inputs=[], outputs=[checkbox_group])
-            uncheck_all_button.click(uncheck_all, inputs=[], outputs=[checkbox_group])
             save_state_button.click(save_checkbox_state, inputs= [checkbox_group, file_name_textbox], outputs=[file_dropdown_component])                        
             file_dropdown_component.change(load_checkbox_state, inputs=[file_dropdown_component], outputs=[checkbox_group])
             
