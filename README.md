@@ -2,7 +2,7 @@
 Extension for A1111, generate prompt randomly.
 
 You can add your category easily. Just add a .csv file in the csv folder. The script will automatically add it to the interface.
-Each entry must be on a different line in the .csv file. Do not use special characters, no commas, only - are accepted.
+Each entry must be on a different line in the .csv file.
 The file name must have a specific format, e.g. x_xnameoffile.csv.
 The x are numbers which will determine the display order in the prompt (alphabetical order).
 There is an automatic mode, select categories, select auto prompting and random prompt, set the batch count to 20, press normal generate button and you will get 20 images with a different prompt for each image.
