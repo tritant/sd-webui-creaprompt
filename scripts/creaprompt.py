@@ -23,21 +23,21 @@ def send_before_prompt(new_text, old_text):
 def send_after_prompt(new_text, old_text):
     return old_text + "," + new_text    
     
-def auto_send_to_final(randprompt):
-    return randprompt
+#def auto_send_to_final(randprompt):
+#    return randprompt
     
 def read_random_line_from_csv_files(checkbox_group):
     chosen_lines = []
-    for idx, filename in enumerate(os.listdir(folder_path)):
+    for filename in os.listdir(folder_path):
         if filename.endswith(".csv"):
             file_path = os.path.join(folder_path, filename)
-            df = pd.read_csv(file_path)
-            if not df.empty:
-                random_index = random.randint(0, len(df))
-                random_row = df.iloc[random_index - 1]
-                for i, choice in enumerate(checkbox_group):
-                    if choice == filename[3:-4]:
-                        chosen_lines.extend(map(str, random_row.tolist()))
+            with open(file_path, 'r', encoding='utf-8') as file:
+                lines = file.readlines()
+                if lines:
+                    random_line = random.choice(lines).strip()
+                    for choice in checkbox_group:
+                        if choice == filename[3:-4]:
+                            chosen_lines.append(random_line)
     concatenated_lines = ",".join(chosen_lines)
 
     if not any(checkbox_group):
@@ -115,9 +115,6 @@ class CreaPromptScript(scripts.Script):
     def __init__(self) -> None:
         super().__init__()
         
-    #checkboxes = getfilename()
-    final_element = None
-
     def title(self):
         return "CreaPrompt"
 
@@ -127,10 +124,6 @@ class CreaPromptScript(scripts.Script):
     def ui(self, is_img2img):
         with gr.Group():
             with gr.Accordion("CreaPrompt", open=False):
-              #gr.Markdown("# CreaPrompt")
-              #gr.Markdown("Select the categories you want to use to create your prompt or build your prompt category by category")
-                                 
-              
               gr.Markdown("# Auto prompting")
               gr.Markdown("When activated, just press the normal generate button, it also works with batch")
               with gr.Row():
@@ -176,9 +169,7 @@ class CreaPromptScript(scripts.Script):
             is_enabled.select(uncheck_auto_collection, inputs=[is_enabled, is_collection_enabled], outputs=[is_collection_enabled])
             is_enabled.select(active_random_prompt, inputs=[is_enabled, is_collection_enabled], outputs=[is_randomize])
             is_collection_enabled.select(active_random_prompt, inputs=[is_enabled, is_collection_enabled], outputs=[is_randomize])
-               
-            
-            
+     
             if is_img2img:
                 
                 submit.click(
