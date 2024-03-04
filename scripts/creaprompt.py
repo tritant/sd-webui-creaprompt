@@ -29,19 +29,13 @@ def send_after_prompt(new_text, old_text):
 def read_random_line_from_csv_files(checkbox_group):
     chosen_lines = []
     for filename in os.listdir(folder_path):
-        if filename.endswith(".csv"):
+        if filename.endswith(".csv") and filename[3:-4] in checkbox_group:
             file_path = os.path.join(folder_path, filename)
             with open(file_path, 'r', encoding='utf-8') as file:
                 lines = file.readlines()
                 if lines:
-                    random_line = random.choice(lines).strip()
-                    for choice in checkbox_group:
-                        if choice == filename[3:-4]:
-                            chosen_lines.append(random_line)
-    concatenated_lines = ",".join(chosen_lines)
-
-    if not any(checkbox_group):
-        concatenated_lines = "Please, select a category."
+                    chosen_lines.append(random.choice(lines).strip())
+    concatenated_lines = ",".join(chosen_lines) if chosen_lines else "Please, select a category."
     return concatenated_lines
     
 def select_random_line_from_collection():
