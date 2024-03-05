@@ -121,17 +121,17 @@ class CreaPromptScript(scripts.Script):
               gr.Markdown("# Auto prompting")
               gr.Markdown("When activated, just press the normal generate button, it also works with batch")
               with gr.Row():
-                      is_enabled = grc.Checkbox(label="Enable auto prompting", info="Enable auto prompting from selected categories", value=False)
-                      is_collection_enabled = grc.Checkbox(label="Enable auto collection", info="Enable auto prompting from collection", value=False)
-                      is_randomize = grc.Checkbox(label="Enable random prompts", info="Enable random prompts for each images in batch", value=False, interactive=False)  
+                      is_enabled = grc.Checkbox(label="Enable auto prompting", info="From selected categories", value=False)
+                      is_collection_enabled = grc.Checkbox(label="Enable auto prompting", info="From CreaPrompt collection", value=False)
+                      is_randomize = grc.Checkbox(label="Enable random prompts", info="For each images in batch", value=False, interactive=False)  
               with gr.Row():
                       gr.Markdown("# ")
               with gr.Row():        
                       gr.Markdown("# ")
               with gr.Row():        
-                      save_state_button = gr.Button("Save a preset of the selected categories", elem_id="save_state", variant="primary")
-                      file_name_textbox = grc.Textbox(elem_id="file_name", show_label=False, placeholder="Enter the name of the preset you want to save", container=True)
-                      file_dropdown_component = gr.Dropdown(show_label=False, choices=get_config_files(), elem_id="file_dropdown", value="Select a categories preset")
+                      save_state_button = gr.Button("Save your preset categories", elem_id="save_state", variant="primary")
+                      file_name_textbox = grc.Textbox(elem_id="file_name", show_label=False, placeholder="Enter your preset name", container=True)
+                      file_dropdown_component = gr.Dropdown(show_label=False, choices=get_config_files(), elem_id="file_dropdown", value="Select a preset")
               with gr.Column():
                       gr.Markdown("#")
                       checkbox_group = grc.CheckboxGroup(label="Select Categories:", choices=checkboxes, default=['base'], min_width=50)
