@@ -9,6 +9,9 @@ from modules import script_callbacks
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 folder_path = os.path.join(script_dir, "../csv/" )
+notactive = "Not Active"
+active = "Active"
+
 
 def send_text_to_prompt(new_text, old_text, Prefix, sufix):
     if Prefix:
@@ -138,8 +141,9 @@ class CreaPromptScript(scripts.Script):
         return scripts.AlwaysVisible
         
     def ui(self, is_img2img):
+        #is_enabled=""
         with gr.Group():
-            with gr.Accordion("CreaPrompt", open=False):
+            with gr.Accordion("CreaPrompt : Not Active",open = False) as acc:
               with gr.Accordion("1----CreaPrompt collection", open=True):
                      gr.Markdown("# CreaPrompt collection")
                      gr.Markdown("When activated, just press the normal generate button, it also works with batch")
@@ -199,6 +203,8 @@ class CreaPromptScript(scripts.Script):
                                     
         with contextlib.suppress(AttributeError):
         
+            is_enabled.select(fn=lambda x:gr.update(label = f"CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_enabled, outputs=[acc])
+            is_collection_enabled.select(fn=lambda x:gr.update(label = f"CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_collection_enabled, outputs=[acc])
             save_state_button_manu.click(save_checkbox_state_manu, inputs= [checkbox_group_manu, file_name_textbox_manu], outputs=[file_dropdown_component_manu, file_dropdown_component])
             save_state_button.click(save_checkbox_state, inputs= [checkbox_group, file_name_textbox], outputs=[file_dropdown_component, file_dropdown_component_manu])                        
             file_dropdown_component.change(load_checkbox_state, inputs=[file_dropdown_component], outputs=[checkbox_group])
