@@ -10,7 +10,7 @@ There is also a collection of prompts which also works automatically
 
 ![Capture d'écran 2024-03-08 074659](https://github.com/tritant/sd-webui-creaprompt/assets/15909062/8a5b22d6-e7e0-46d5-80d4-cf9ad21d4b76)
 
-
+Thanks to:
 Philippe Joye, Francis Malapris, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle, Laurent Vishnou, Antoine Drugeot
 
 Francophones, rejoignez nous sur le groupe facebook Stable Diffusion FR
