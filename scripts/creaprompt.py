@@ -153,15 +153,15 @@ class CreaPromptScript(scripts.Script):
                      #gr.Markdown("# CreaPrompt collection")
                      gr.Markdown("When activated, just press the normal generate button, it also works with batch")
                      with gr.Row():
-                       is_collection_enabled = grc.Checkbox(label="Enable auto prompting", info="From CreaPrompt collection", value=False)
-                       is_randomize_manu = grc.Checkbox(label="Enable random prompts🎲", info="For each images in batch", value=False, interactive=True)
+                       is_collection_enabled = grc.Checkbox(label="♻️Enable auto prompting", info="💬From CreaPrompt collection", value=False)
+                       is_randomize_manu = grc.Checkbox(label="🎲Enable random prompts", info="💬For each images in batch", value=False, interactive=True)
               with gr.Accordion("➡️Auto prompting from categories", open=False):
                      with gr.Column(scale=3):
                        #gr.Markdown("# Auto prompting from categories")
                        gr.Markdown("When activated, just press the normal generate button, it also works with batch")
                      with gr.Row():
-                       is_enabled = grc.Checkbox(label="Enable auto prompting", info="From selected categories", value=False)
-                       is_randomize = grc.Checkbox(label="Enable random prompts", info="For each images in batch", value=False, interactive=True)  
+                       is_enabled = grc.Checkbox(label="♻️Enable auto prompting", info="💬From selected categories", value=False)
+                       is_randomize = grc.Checkbox(label="🎲Enable random prompts", info="💬For each images in batch", value=False, interactive=True)  
                      with gr.Row():
                        gr.Markdown("# ")
                      with gr.Column(scale=3):
@@ -181,7 +181,7 @@ class CreaPromptScript(scripts.Script):
               with gr.Accordion("➡️Create prompt manually from categories", open=False):         
                      with gr.Column(scale=3):
                        #gr.Markdown("# Create prompt manually from categories")
-                       gr.Markdown("Press the normal generate button to start generating image with the final prompt")
+                       gr.Markdown("💬Press the normal generate button to start generating image with the final prompt")
                        final = grc.Textbox(label="Final prompt which will be used to generate the image:", elem_id="creaprompt_prompt_final", show_label=True, lines=2, placeholder="The final prompt is displayed here", container=True)
                        Prefix = grc.Textbox(label="Prefix of the Prompt:", elem_id="prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it", container=True)
                        sufix = grc.Textbox(label="Suffix of the Prompt:", elem_id="prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it", container=True)
