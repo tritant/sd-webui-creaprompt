@@ -208,8 +208,8 @@ class CreaPromptScript(scripts.Script):
                                     
         with contextlib.suppress(AttributeError):
         
-            is_enabled.select(fn=lambda x:gr.update(label = f"CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_enabled, outputs=[acc])
-            is_collection_enabled.select(fn=lambda x:gr.update(label = f"CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_collection_enabled, outputs=[acc])
+            is_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_enabled, outputs=[acc])
+            is_collection_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_collection_enabled, outputs=[acc])
             save_state_button_manu.click(save_checkbox_state_manu, inputs= [checkbox_group_manu, file_name_textbox_manu], outputs=[file_dropdown_component_manu, file_dropdown_component])
             save_state_button.click(save_checkbox_state, inputs= [checkbox_group, file_name_textbox], outputs=[file_dropdown_component, file_dropdown_component_manu])                        
             file_dropdown_component.change(load_checkbox_state, inputs=[file_dropdown_component], outputs=[checkbox_group])
