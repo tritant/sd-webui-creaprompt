@@ -9,12 +9,21 @@ from modules import script_callbacks
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 folder_path = os.path.join(script_dir, "../csv/" )
+notactive = "Not Active"
+active = "Active"
+dropdowns = []
 
 def send_text_to_prompt(new_text, old_text, Prefix, sufix):
+    #global is_manual
+    #is_manual = True
+    #print(is_manual)
     if Prefix:
         new_text = Prefix + "," + new_text
     if sufix:
         new_text = new_text + "," + sufix
+    return new_text
+    
+def send_text_to_prompt_auto(new_text):
     return new_text
     
 def send_before_prompt(new_text, old_text):
@@ -119,11 +128,22 @@ def uncheck_auto_collection(is_enabled, is_collection_enabled):
     if not is_collection_enabled and not is_enabled:
        return
     return not is_enabled
+    
+def handle_dropdown_change(selected_value, dropdown_index):
+    concatenated_values = ""
+    global dropdowns
+    if selected_value == "None\n":
+       selected_value =""
+    dropdown_values[dropdown_index] = selected_value[1:]
+    concatenated_values = ""
+    for value in dropdown_values:
+        if value:
+            concatenated_values += value + ","
+    concatenated_values = concatenated_values.rstrip(", ")
+    #print(concatenated_values)
+    return concatenated_values
 
-#def active_random_prompt(is_enabled, is_collection_enabled):
-#    if is_enabled or is_collection_enabled:
-#       return gr.update(interactive=True)
-#    return gr.update(interactive=False, value=False)
+
         
 checkboxes = getfilename()          
 
@@ -138,21 +158,28 @@ class CreaPromptScript(scripts.Script):
         return scripts.AlwaysVisible
         
     def ui(self, is_img2img):
+        #is_enabled=""
         with gr.Group():
-            with gr.Accordion("CreaPrompt", open=False):
-              with gr.Accordion("CreaPrompt collection", open=True):
-                     gr.Markdown("# CreaPrompt collection")
+            with gr.Accordion("🎨CreaPrompt : Not Active",open = False) as acc:
+              gr.Markdown("""
+                            <center><font size="4">
+                                🧠CreaPrompt, the toolbox for crazy prompters🧠
+                            </font></center><br>
+                            """)
+              with gr.Accordion("➡️CreaPrompt collection", open=True):
+                     #gr.Markdown("# CreaPrompt collection")
                      gr.Markdown("When activated, just press the normal generate button, it also works with batch")
                      with gr.Row():
-                       is_collection_enabled = grc.Checkbox(label="Enable auto prompting", info="From CreaPrompt collection", value=False)
-                       is_randomize_manu = grc.Checkbox(label="Enable random prompts", info="For each images in batch", value=False, interactive=True)
-              with gr.Accordion("Auto prompting from categories", open=False):
+                       is_collection_enabled = grc.Checkbox(label="♻️Enable auto prompting", info="💬From CreaPrompt collection", value=False)
+                       is_randomize_manu = grc.Checkbox(label="🎲Enable random prompts", info="💬For each images in batch", value=False, interactive=True)
+              with gr.Accordion("➡️Auto prompting from categories", open=False):
+                with gr.Tab("Random"):
                      with gr.Column(scale=3):
-                       gr.Markdown("# Auto prompting from categories")
+                       #gr.Markdown("# Auto prompting from categories")
                        gr.Markdown("When activated, just press the normal generate button, it also works with batch")
                      with gr.Row():
-                       is_enabled = grc.Checkbox(label="Enable auto prompting", info="From selected categories", value=False)
-                       is_randomize = grc.Checkbox(label="Enable random prompts", info="For each images in batch", value=False, interactive=True)  
+                       is_enabled = grc.Checkbox(label="♻️Enable auto prompting", info="💬From selected categories", value=False)
+                       is_randomize = grc.Checkbox(label="🎲Enable random prompts", info="💬For each images in batch", value=False, interactive=True)  
                      with gr.Row():
                        gr.Markdown("# ")
                      with gr.Column(scale=3):
@@ -169,10 +196,42 @@ class CreaPromptScript(scripts.Script):
                        save_state_button = gr.Button("Save your preset categories", elem_id="save_state", variant="primary")
                        file_name_textbox = grc.Textbox(elem_id="file_name", show_label=False, placeholder="Enter your preset name", container=True)
                        file_dropdown_component = gr.Dropdown(show_label=False, choices=get_config_files(), elem_id="file_dropdown", value="Select a preset")
-              with gr.Accordion("Create prompt manually from categories", open=False):         
+                with gr.Tab("Manual"):
+                    gr.Markdown("""
+                            <center><font size="4">
+                                Work in progress
+                            </font><font size="2">Random selection does not work yet. To do, auto mode, save preset, prefix,suffix and random selection</font></center><br>
+                    
+                              """)
+                    with gr.Row():
+                      gr.Markdown("Select what you want from the menus, press the send to general prompt button and press normal generate button")
+                    with gr.Row():
+                      auto_final = grc.Textbox(label="Final result:", elem_id="manual_prompt_result", show_label=True, lines=2, placeholder="Final result", container=True)
+                    with gr.Row():
+                      gr.Markdown("# ")
+                    with gr.Row():
+                      send_result = gr.Button("Send to general prompt", elem_id="send_result_manu", variant="primary")       
+                    with gr.Row(): 
+                      gr.Markdown("# ")
+                    with gr.Row():
+                      #dropdowns = []        
+                      for filename in os.listdir(folder_path):
+                        if filename.endswith(".csv"):
+                           file_path = os.path.join(folder_path, filename)
+                           lines = []
+                           with open(file_path, 'r', encoding='utf-8') as file:
+                              lines = file.readlines()
+                           lines = ["➡️" + line.strip() for line in lines]
+                           lines.insert(0, "None\n")
+                           lines.insert(1, "🎲Random\n")
+                           dropdown_component = grc.Dropdown(label=f"{filename[3:-4]}", choices=lines, elem_id=f"{filename}_dropdown", container=True, value="None")
+                           dropdowns.append(dropdown_component)
+                    global dropdown_values
+                    dropdown_values = [""] * len(dropdowns)                    
+              with gr.Accordion("➡️Create prompt manually from categories", open=False):         
                      with gr.Column(scale=3):
-                       gr.Markdown("# Create prompt manually from categories")
-                       gr.Markdown("Press the normal generate button to start generating image with the final prompt")
+                       #gr.Markdown("# Create prompt manually from categories")
+                       gr.Markdown("💬Press the normal generate button to start generating image with the final prompt")
                        final = grc.Textbox(label="Final prompt which will be used to generate the image:", elem_id="creaprompt_prompt_final", show_label=True, lines=2, placeholder="The final prompt is displayed here", container=True)
                        Prefix = grc.Textbox(label="Prefix of the Prompt:", elem_id="prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it", container=True)
                        sufix = grc.Textbox(label="Suffix of the Prompt:", elem_id="prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it", container=True)
@@ -199,6 +258,8 @@ class CreaPromptScript(scripts.Script):
                                     
         with contextlib.suppress(AttributeError):
         
+            is_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_enabled, outputs=[acc])
+            is_collection_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_collection_enabled, outputs=[acc])
             save_state_button_manu.click(save_checkbox_state_manu, inputs= [checkbox_group_manu, file_name_textbox_manu], outputs=[file_dropdown_component_manu, file_dropdown_component])
             save_state_button.click(save_checkbox_state, inputs= [checkbox_group, file_name_textbox], outputs=[file_dropdown_component, file_dropdown_component_manu])                        
             file_dropdown_component.change(load_checkbox_state, inputs=[file_dropdown_component], outputs=[checkbox_group])
@@ -207,6 +268,11 @@ class CreaPromptScript(scripts.Script):
             is_enabled.select(uncheck_auto_collection, inputs=[is_enabled, is_collection_enabled], outputs=[is_collection_enabled])
             #is_enabled.select(active_random_prompt, inputs=[is_enabled, is_collection_enabled], outputs=[is_randomize])
             #is_collection_enabled.select(active_random_prompt, inputs=[is_enabled, is_collection_enabled], outputs=[is_randomize])
+            for i, dropdown_component in enumerate(dropdowns):
+                #dropdown_component.change(lambda selected_value, index=i: (handle_dropdown_change(selected_value, index), dropdown_change_handler(i)), inputs=[dropdown_component], outputs=[auto_final])
+                dropdown_component.change(lambda selected_value, index=i: handle_dropdown_change(selected_value, index), inputs=[dropdown_component], outputs=[auto_final])
+                   
+                
      
             if is_img2img:
                 
@@ -221,6 +287,7 @@ class CreaPromptScript(scripts.Script):
                 Sendafter.click(fn=send_after_prompt, inputs=[prompt, self.boxxIMG], outputs=[final])
                 send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxxIMG, Prefix, sufix], outputs=[self.boxxIMG])
                 send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxxIMG, Prefix, sufix], outputs=[final])
+                send_result.click(fn=send_text_to_prompt_auto, inputs=[auto_final], outputs=[self.boxxIMG])
             else:
                 
                 submit.click(
@@ -234,6 +301,7 @@ class CreaPromptScript(scripts.Script):
                 Sendafter.click(fn=send_after_prompt, inputs=[prompt, self.boxx], outputs=[final])
                 send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx, Prefix, sufix], outputs=[self.boxx])
                 send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx, Prefix, sufix], outputs=[final])
+                send_result.click(fn=send_text_to_prompt_auto, inputs=[auto_final], outputs=[self.boxx])
         return [is_enabled, checkbox_group, is_randomize, is_collection_enabled, prefix_auto, sufix_auto, is_randomize_manu]
         
     def process(self, p, is_enabled, checkbox_group, is_randomize, is_collection_enabled, prefix_auto, sufix_auto, is_randomize_manu):
@@ -245,7 +313,8 @@ class CreaPromptScript(scripts.Script):
               for i, prompt in enumerate(p.all_prompts):
                   randprompt=select_random_line_from_collection()  
               p.all_prompts[i] = randprompt
-              print("Prompt used from collection:" + " " + randprompt)        
+              print("Prompt used from collection:" + " " + randprompt)    
+              p.extra_generation_params.update({"CreaPrompt":"Collection"})              
 
            if(batchCount > 1):
             randprompts = {}
@@ -260,10 +329,15 @@ class CreaPromptScript(scripts.Script):
                     if i == 0:
                       randprompt = select_random_line_from_collection()
                       print("Prompt used from collection:" + " " + randprompt)
-                p.all_prompts[i] = randprompt    
+                p.all_prompts[i] = randprompt  
+                p.extra_generation_params.update({"CreaPrompt":"Collection"})                
     
         if not is_enabled:
-            return
+          # if is_manual and not is_collection_enabled:
+           #   p.extra_generation_params.update({"CreaPrompt":"Manual mode"})
+            #  print("passe")
+           #print(is_manual)
+           return
 
         if(batchCount == 1):
             for i, prompt in enumerate(p.all_prompts):
@@ -274,6 +348,7 @@ class CreaPromptScript(scripts.Script):
                    randprompt = randprompt + "," + sufix_auto
             p.all_prompts[i] = randprompt
             print("Prompt used for auto prompting:" + " " + randprompt)
+            p.extra_generation_params.update({"CreaPrompt From categories":", ".join([str(x) for x in checkbox_group])})
             
         if(batchCount > 1):
             randprompts = {}
@@ -297,6 +372,8 @@ class CreaPromptScript(scripts.Script):
                          randprompt = randprompt + "," + sufix_auto
                       print("Prompt used for auto prompting:" + " " + randprompt)
                 p.all_prompts[i] = randprompt
+                p.extra_generation_params.update({"CreaPrompt From categories":", ".join([str(x) for x in checkbox_group])})
+
         
 
     def after_component(self, component, **kwargs):
