@@ -10,6 +10,12 @@ There is also a collection of prompts which also works automatically
 
 ![Capture d'écran 2024-03-08 074659](https://github.com/tritant/sd-webui-creaprompt/assets/15909062/8a5b22d6-e7e0-46d5-80d4-cf9ad21d4b76)
 
+In manual mode, you can make precise choices for certain categories and put others in random mode. This also works for batch
+
+![Capture d'écran 2024-03-21 123439](https://github.com/tritant/sd-webui-creaprompt/assets/15909062/d1b16c7b-4e18-47bc-bcc3-7dc3ebf9b812)
+
+
+
 Thanks to:
 
 Philippe Joye, Francis Malapris, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle, Laurent Vishnou, Antoine Drugeot
