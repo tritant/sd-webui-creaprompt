@@ -221,7 +221,7 @@ class CreaPromptScript(scripts.Script):
                     gr.Markdown("""
                             <center><font size="4">
                                 Work in progress
-                            </font><font size="2">To do, save preset, prefix,suffix</font></center><br>
+                            </font><font size="2">To do, save preset</font></center><br>
                     
                               """)
                     with gr.Row():
@@ -231,10 +231,14 @@ class CreaPromptScript(scripts.Script):
                       is_manual_random = grc.Checkbox(label="🎲Enable random prompts", info="💬For each images in batch", value=False, interactive=True)
                     with gr.Row():
                       gr.Markdown("# ")
-                    with gr.Row(): 
-                      auto_final = grc.Textbox(label="Prompt preview:", elem_id="manual_prompt_result", show_label=True, lines=2, placeholder="The prompt that will be used", container=True)
+                    with gr.Column(scale=3):
+                      prefix_manual = grc.Textbox(label="Prefix of the Prompt:", elem_id="manual_prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it", container=True)
+                      sufix_manual = grc.Textbox(label="Suffix of the Prompt:", elem_id="manual_prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it", container=True)
+                      auto_final = grc.Textbox(label="Prompt preview:", elem_id="manual_prompt_result", show_label=True, lines=2, placeholder="The prompt that will be used", interactive=False, container=True)
                     with gr.Row():
                       gr.Markdown("# ")
+                    with gr.Row():
+                      gr.Markdown("# ")  
                     with gr.Row():
                       for filename in os.listdir(folder_path):
                         if filename.endswith(".csv"):
@@ -325,9 +329,9 @@ class CreaPromptScript(scripts.Script):
                 send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx, Prefix, sufix], outputs=[self.boxx])
                 send_text_button.click(fn=send_text_to_prompt, inputs=[prompt, self.boxx, Prefix, sufix], outputs=[final])
                 
-        return [is_enabled, checkbox_group, is_randomize, is_collection_enabled, prefix_auto, sufix_auto, is_randomize_manu, is_manual_enabled, is_manual_random]
+        return [is_enabled, checkbox_group, is_randomize, is_collection_enabled, prefix_auto, sufix_auto, is_randomize_manu, is_manual_enabled, is_manual_random, prefix_manual, sufix_manual]
         
-    def process(self, p, is_enabled, checkbox_group, is_randomize, is_collection_enabled, prefix_auto, sufix_auto, is_randomize_manu, is_manual_enabled, is_manual_random):
+    def process(self, p, is_enabled, checkbox_group, is_randomize, is_collection_enabled, prefix_auto, sufix_auto, is_randomize_manu, is_manual_enabled, is_manual_random, prefix_manual, sufix_manual):
     
         batchCount = len(p.all_prompts)
         
@@ -349,6 +353,10 @@ class CreaPromptScript(scripts.Script):
                  for value in back_dropdown_values:
                     if value:
                        concatenated_values += value + ","
+                 if prefix_manual:
+                    concatenated_values = prefix_manual + "," + concatenated_values
+                 if sufix_manual:
+                    concatenated_values = concatenated_values + sufix_manual                      
                  concatenated_values = concatenated_values.rstrip(", ")
                  print("Prompt used for manual from categories:" + " " + concatenated_values)
                  p.extra_generation_params.update({"CreaPrompt":"manual from categories"})
@@ -374,6 +382,10 @@ class CreaPromptScript(scripts.Script):
                         for value in back_dropdown_values:
                            if value:
                               concatenated_values += value + ","
+                        if prefix_manual:
+                           concatenated_values = prefix_manual + "," + concatenated_values
+                        if sufix_manual:
+                           concatenated_values = concatenated_values + sufix_manual      
                         concatenated_values = concatenated_values.rstrip(", ")
                         print("Prompt used for manual from categories:" + " " + concatenated_values)
                         p.extra_generation_params.update({"CreaPrompt":"manual from categories"})
@@ -396,6 +408,10 @@ class CreaPromptScript(scripts.Script):
                         for value in back_dropdown_values:
                            if value:
                               concatenated_values += value + ","
+                        if prefix_manual:
+                           concatenated_values = prefix_manual + "," + concatenated_values
+                        if sufix_manual:
+                           concatenated_values = concatenated_values + sufix_manual
                         concatenated_values = concatenated_values.rstrip(", ")
                         print("Prompt used for manual from categories:" + " " + concatenated_values)
                    p.extra_generation_params.update({"CreaPrompt":"manual from categories"})
