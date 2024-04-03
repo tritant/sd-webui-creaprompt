@@ -18,7 +18,7 @@ In manual mode, you can make precise choices for certain categories and put othe
 
 Thanks to:
 
-Philippe Joye, Francis Malapris, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle, Laurent Vishnou, Antoine Drugeot
+Franck Demongin, Philippe Joye, Francis Malapris, Franck Cal, StudioD Uzès, Néo Drôle De Gueule, Light Vision AI, Adel AI, Thomas Buyle, Laurent Vishnou, Antoine Drugeot
 
 Francophones, rejoignez nous sur le groupe facebook Stable Diffusion FR
 
