@@ -1,7 +1,7 @@
 # sd-webui-creaprompt
 Extension for A1111, generate prompt randomly.
 
-For best results use the CreaPrompt_Lightning_v1.1 checkpoint
+For best results, use CreaPrompt_Lightning_v1.1 checkpoint
 
 https://civitai.com/models/383364?modelVersionId=430982
 
