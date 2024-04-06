@@ -1,6 +1,7 @@
 # sd-webui-creaprompt
 Extension for A1111, generate prompt randomly.
 For best results use the CreaPrompt_Lightning_v1.1 checkpoint
+
 https://civitai.com/models/383364?modelVersionId=430982
 
 You can add your category easily. Just add a .csv file in the csv folder. The script will automatically add it to the interface.
