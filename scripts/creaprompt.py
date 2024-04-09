@@ -145,7 +145,6 @@ def uncheck_auto_manual(is_manual_enabled, is_collection_enabled, is_enabled ):
     
 def handle_dropdown_change(selected_value, dropdown_index):
     concatenated_values = ""
-    #global dropdowns
     if selected_value == "🎲Random\n":
        i = 0
        for filename in os.listdir(folder_path):
@@ -163,8 +162,16 @@ def handle_dropdown_change(selected_value, dropdown_index):
         if value:
             concatenated_values += value + ","
     concatenated_values = concatenated_values.rstrip(", ")
-    #print(concatenated_values)
     return concatenated_values
+    
+def none_dropdown_change(selected_value, dropdown_index):
+        return gr.update(value= "None\n")
+        
+def none_dropdown_change_clear():
+        selected_value =""
+        for i, value in enumerate(dropdown_values):
+            dropdown_values[i] = selected_value[1:]
+        return selected_value
         
 checkboxes = getfilename()          
 
@@ -179,7 +186,6 @@ class CreaPromptScript(scripts.Script):
         return scripts.AlwaysVisible
         
     def ui(self, is_img2img):
-        #is_enabled=""
         with gr.Group():
             with gr.Accordion("🎨CreaPrompt : Not Active",open = False) as acc:
               gr.Markdown("""
@@ -188,7 +194,6 @@ class CreaPromptScript(scripts.Script):
                             </font></center><br>
                             """)
               with gr.Accordion("➡️CreaPrompt collection", open=False):
-                     #gr.Markdown("# CreaPrompt collection")
                      gr.Markdown("When activated, just press the normal generate button, it also works with batch")
                      with gr.Row():
                        is_collection_enabled = grc.Checkbox(label="♻️Enable auto prompting", info="💬From CreaPrompt collection", value=False)
@@ -196,7 +201,6 @@ class CreaPromptScript(scripts.Script):
               with gr.Accordion("➡️Auto prompting from categories", open=True):
                 with gr.Tab("✨Random"):
                      with gr.Column(scale=3):
-                       #gr.Markdown("# Auto prompting from categories")
                        gr.Markdown("When activated, select categories and press the normal generate button, it also works with batch")
                      with gr.Row():
                        is_enabled = grc.Checkbox(label="♻️Enable auto prompting", info="💬From selected categories", value=False)
@@ -218,12 +222,6 @@ class CreaPromptScript(scripts.Script):
                        file_name_textbox = grc.Textbox(elem_id="file_name", show_label=False, placeholder="Enter your preset name", container=True)
                        file_dropdown_component = gr.Dropdown(show_label=False, choices=get_config_files(), elem_id="file_dropdown", value="Select a preset")
                 with gr.Tab("✨Manual"):
-                    gr.Markdown("""
-                            <center><font size="4">
-                                Work in progress
-                            </font><font size="2">To do, save preset</font></center><br>
-                    
-                              """)
                     with gr.Row():
                       gr.Markdown("When activated, select what you want from the menus and press normal generate button, it also works with batch")
                     with gr.Row():
@@ -235,6 +233,8 @@ class CreaPromptScript(scripts.Script):
                       prefix_manual = grc.Textbox(label="Prefix of the Prompt:", elem_id="manual_prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it", container=True)
                       sufix_manual = grc.Textbox(label="Suffix of the Prompt:", elem_id="manual_prompt_sufix", show_label=True, lines=2, placeholder="Type your suffix or leave blank if you don't want it", container=True)
                       auto_final = grc.Textbox(label="Prompt preview:", elem_id="manual_prompt_result", show_label=True, lines=2, placeholder="The prompt that will be used", interactive=False, container=True)
+                      gr.Markdown("# ")
+                      all_none_button = gr.Button("Put all categories to None and Clear prompt list, it may take a few seconds", elem_id="all_none", variant="primary")
                     with gr.Row():
                       gr.Markdown("# ")
                     with gr.Row():
@@ -252,10 +252,9 @@ class CreaPromptScript(scripts.Script):
                            dropdown_component = grc.Dropdown(label=f"{filename[3:-4]}", choices=lines, elem_id=f"{filename}_dropdown", container=True, value="None")
                            dropdowns.append(dropdown_component)
                     global dropdown_values
-                    dropdown_values = [""] * len(dropdowns)                    
+                    dropdown_values = [""] * len(dropdowns) 
               with gr.Accordion("➡️Create prompt manually from categories", open=False):         
                      with gr.Column(scale=3):
-                       #gr.Markdown("# Create prompt manually from categories")
                        gr.Markdown("💬Press the normal generate button to start generating image with the final prompt")
                        final = grc.Textbox(label="Final prompt which will be used to generate the image:", elem_id="creaprompt_prompt_final", show_label=True, lines=2, placeholder="The final prompt is displayed here", container=True)
                        Prefix = grc.Textbox(label="Prefix of the Prompt:", elem_id="prompt_prefix", show_label=True, lines=2, placeholder="Type your prefix or leave blank if you don't want it", container=True)
@@ -282,7 +281,11 @@ class CreaPromptScript(scripts.Script):
                                 gr.Markdown("# ")
                                     
         with contextlib.suppress(AttributeError):
-        
+
+            for i, dropdown_component in enumerate(dropdowns):
+                all_none_button.click(none_dropdown_change, inputs=[dropdowns[i]], outputs=[dropdowns[i]])
+
+            all_none_button.click(none_dropdown_change_clear, outputs=[auto_final])
             is_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_enabled, outputs=[acc])
             is_collection_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_collection_enabled, outputs=[acc])
             is_manual_enabled.select(fn=lambda x:gr.update(label = f"🎨CreaPrompt : {'Active' if x else 'Not Active'}"),inputs=is_manual_enabled, outputs=[acc])
@@ -293,14 +296,10 @@ class CreaPromptScript(scripts.Script):
             is_collection_enabled.select(uncheck_auto_box, inputs=[is_collection_enabled, is_enabled, is_manual_enabled], outputs=[is_enabled, is_manual_enabled])
             is_enabled.select(uncheck_auto_collection, inputs=[is_enabled, is_collection_enabled, is_manual_enabled], outputs=[is_collection_enabled, is_manual_enabled])
             is_manual_enabled.select(uncheck_auto_manual, inputs=[is_manual_enabled, is_enabled, is_collection_enabled], outputs=[is_collection_enabled, is_enabled])
-            #is_enabled.select(active_random_prompt, inputs=[is_enabled, is_collection_enabled], outputs=[is_randomize])
-            #is_collection_enabled.select(active_random_prompt, inputs=[is_enabled, is_collection_enabled], outputs=[is_randomize])
+
             for i, dropdown_component in enumerate(dropdowns):
-                #dropdown_component.change(lambda selected_value, index=i: (handle_dropdown_change(selected_value, index), dropdown_change_handler(i)), inputs=[dropdown_component], outputs=[auto_final])
-                dropdown_component.change(lambda selected_value, index=i: handle_dropdown_change(selected_value, index), inputs=[dropdown_component], outputs=[auto_final])
+                dropdown_component.select(lambda selected_value, index=i: handle_dropdown_change(selected_value, index), inputs=[dropdown_component], outputs=[auto_final])
                    
-                
-     
             if is_img2img:
                 
                 submit.click(
@@ -339,7 +338,6 @@ class CreaPromptScript(scripts.Script):
            if(batchCount == 1):
               back_dropdown_values = dropdown_values.copy()
               concatenated_values = ""
-              #print (dropdown_values)
               values_exist = False
               for i, value in enumerate(back_dropdown_values):
                  if value:
@@ -367,7 +365,6 @@ class CreaPromptScript(scripts.Script):
                   if(is_manual_random):
                      back_dropdown_values = dropdown_values.copy()
                      concatenated_values = ""
-                     #print (dropdown_values)
                      values_exist = False
                      for a, value in enumerate(back_dropdown_values):
                         if value:
@@ -394,7 +391,6 @@ class CreaPromptScript(scripts.Script):
                    if i == 0:
                      back_dropdown_values = dropdown_values.copy()
                      concatenated_values = ""
-                     #print (dropdown_values)
                      values_exist = False
                      for a, value in enumerate(back_dropdown_values):
                         if value:
@@ -442,10 +438,6 @@ class CreaPromptScript(scripts.Script):
                 p.extra_generation_params.update({"CreaPrompt":"Collection"})                
     
         if not is_enabled:
-          # if is_manual and not is_collection_enabled:
-           #   p.extra_generation_params.update({"CreaPrompt":"Manual mode"})
-            #  print("passe")
-           #print(is_manual)
            return
 
         if(batchCount == 1):
@@ -483,15 +475,12 @@ class CreaPromptScript(scripts.Script):
                 p.all_prompts[i] = randprompt
                 p.extra_generation_params.update({"CreaPrompt random From categories":", ".join([str(x) for x in checkbox_group])})
 
-        
-
     def after_component(self, component, **kwargs):
         if kwargs.get("elem_id") == "txt2img_prompt":
             self.boxx = component
         if kwargs.get("elem_id") == "img2img_prompt":
             self.boxxIMG = component
-
-
+           
 
 
 
