@@ -191,7 +191,10 @@ class CreaPromptScript(scripts.Script):
               gr.Markdown("""
                             <center><font size="4">
                                 🧠CreaPrompt, the toolbox for crazy prompters🧠
-                            </font></center><br>
+                                </font>
+                                <br>
+                                For best result, use <a href="https://civitai.com/models/383364?modelVersionId=539661">CreaPrompt_Ultimate </a> Checkpoint
+                            </center><br>
                             """)
               with gr.Accordion("➡️CreaPrompt collection", open=False):
                      gr.Markdown("When activated, just press the normal generate button, it also works with batch")
