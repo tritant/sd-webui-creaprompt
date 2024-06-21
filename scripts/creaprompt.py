@@ -362,7 +362,7 @@ class CreaPromptScript(scripts.Script):
                  print("Prompt used for manual from categories:" + " " + concatenated_values)
                  p.extra_generation_params.update({"CreaPrompt":"manual from categories"})
                  p.all_prompts[0] = concatenated_values
-                 p.all_hr_prompts[0] = p.all_prompts[0]
+                 p.all_hr_prompts = p.all_prompts[0]
            if(batchCount > 1):   
               for i, prompt in enumerate(p.all_prompts):
                   if(is_manual_random):
@@ -390,7 +390,7 @@ class CreaPromptScript(scripts.Script):
                         print("Prompt used for manual from categories:" + " " + concatenated_values)
                         p.extra_generation_params.update({"CreaPrompt":"manual from categories"})
                         p.all_prompts[i] = concatenated_values
-                        p.all_hr_prompts[0] = p.all_prompts[i]
+                        p.all_hr_prompts = p.all_prompts[i]
                   else:
                    if i == 0:
                      back_dropdown_values = dropdown_values.copy()
@@ -416,13 +416,13 @@ class CreaPromptScript(scripts.Script):
                         print("Prompt used for manual from categories:" + " " + concatenated_values)
                    p.extra_generation_params.update({"CreaPrompt":"manual from categories"})
                    p.all_prompts[i] = concatenated_values
-                   p.all_hr_prompts[0] = p.all_prompts[i]
+                   p.all_hr_prompts = p.all_prompts[i]
         if is_collection_enabled:
            if(batchCount == 1):
               for i, prompt in enumerate(p.all_prompts):
                   randprompt=select_random_line_from_collection()  
               p.all_prompts[i] = randprompt
-              p.all_hr_prompts[0] = p.all_prompts[i]
+              p.all_hr_prompts = p.all_prompts[i]
               print("Prompt used from collection:" + " " + randprompt)    
               p.extra_generation_params.update({"CreaPrompt":"Collection"})              
            if(batchCount > 1):
@@ -433,14 +433,14 @@ class CreaPromptScript(scripts.Script):
                    randprompt = select_random_line_from_collection()
                    randprompts[i] = randprompt
                    p.all_prompts[i] = randprompts[i]
-                   p.all_hr_prompts[0] = p.all_prompts[i]
+                   p.all_hr_prompts = p.all_prompts[i]
                    print("Prompt used from collection:" + " " + randprompts[i])
                 else:
                     if i == 0:
                       randprompt = select_random_line_from_collection()
                       print("Prompt used from collection:" + " " + randprompt)
                 p.all_prompts[i] = randprompt
-                p.all_hr_prompts[0] = p.all_prompts[i]                
+                p.all_hr_prompts = p.all_prompts[i]                
                 p.extra_generation_params.update({"CreaPrompt":"Collection"})                
     
         if not is_enabled:
@@ -454,7 +454,7 @@ class CreaPromptScript(scripts.Script):
                 if sufix_auto:
                    randprompt = randprompt + "," + sufix_auto
             p.all_prompts[i] = randprompt
-            p.all_hr_prompts[i] = p.all_prompts[i]
+            p.all_hr_prompts = p.all_prompts[i]
             print("Prompt used for random from categories:" + " " + randprompt)
             p.extra_generation_params.update({"CreaPrompt random From categories":", ".join([str(x) for x in checkbox_group])})
             
@@ -470,7 +470,7 @@ class CreaPromptScript(scripts.Script):
                       randprompt = randprompt + "," + sufix_auto
                    randprompts[i] = randprompt
                    p.all_prompts[i] = randprompts[i]
-                   p.all_hr_prompts[0] = p.all_prompts[i]
+                   p.all_hr_prompts = p.all_prompts[i]
                    print("Prompt used for random from categories:" + " " + randprompts[i])
                 else:
                     if i == 0:
@@ -481,7 +481,7 @@ class CreaPromptScript(scripts.Script):
                          randprompt = randprompt + "," + sufix_auto
                       print("Prompt used for random from categories:" + " " + randprompt)
                 p.all_prompts[i] = randprompt
-                p.all_hr_prompts[0] = p.all_prompts[i]
+                p.all_hr_prompts = p.all_prompts[i]
                 p.extra_generation_params.update({"CreaPrompt random From categories":", ".join([str(x) for x in checkbox_group])})
 
     def after_component(self, component, **kwargs):
