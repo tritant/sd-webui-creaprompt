@@ -5,6 +5,10 @@ For best results, use CreaPrompt_Ultimate checkpoint
 
 https://civitai.com/models/383364?modelVersionId=602452
 
+Now, there is a node for comfyui, you can find it at
+
+https://github.com/tritant/ComfyUI_CreaPrompt
+
 You can add your category easily. Just add a .csv file in the csv folder. The script will automatically add it to the interface.
 Each entry must be on a different line in the .csv file.
 The file name must have a specific format, e.g. x_xnameoffile.csv.
